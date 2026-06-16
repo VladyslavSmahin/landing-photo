@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анастасия Куприянова — Обучение фотографии</title>
+<meta name="description" content="Индивидуальное обучение портретной и lifestyle-фотографии — от базы до уверенного результата. Онлайн и офлайн (Ростов-на-Дону).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A;
+    --surface-1:#111111;
+    --surface-2:#161616;
+    --gold:#C9A96E;
+    --gold-soft:rgba(201,169,110,.14);
+    --text:#F0EDE8;
+    --text-dim:#6B6B6B;
+    --divider:#1E1E1E;
+    --maxw:1180px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* фоновый grain + сетка */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background-image:
+      linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+    background-size:64px 64px;
+    pointer-events:none;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    opacity:.04;
+    pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  img,svg{display:block}
+  a{color:inherit;text-decoration:none}
+
+  .container{
+    width:100%;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── типографика ─────────────────── */
+  .display{
+    font-family:'Playfair Display',serif;
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-.01em;
+  }
+  .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:var(--gold);
+    font-weight:500;
+  }
+  .section-head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 36px;
+  }
+  .section-head .label{display:inline-block;margin-bottom:18px}
+  .section-head h2{
+    font-size:clamp(28px,4vw,42px);
+  }
+  .section-head p{
+    color:var(--text-dim);
+    margin-top:14px;
+    font-size:16px;
+  }
+
+  /* ── золотая линия-разделитель ──── */
+  .gold-rule{
+    width:100%;
+    max-width:var(--maxw);
+    height:1px;
+    background:var(--gold);
+    opacity:.55;
+    margin:0 auto;
+  }
+  .section-divider{
+    border:none;
+    height:1px;
+    background:var(--divider);
+    max-width:var(--maxw);
+    margin:0 auto;
+  }
+
+  /* ── кнопки ──────────────────────── */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:.04em;
+    padding:15px 32px;
+    border-radius:2px;
+    cursor:pointer;
+    transition:all .35s var(--ease);
+  }
+  .btn-outline{
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold);
+  }
+  .btn-outline:hover{
+    background:var(--gold);
+    color:#0A0A0A;
+  }
+  .btn-solid{
+    background:var(--gold);
+    border:1px solid var(--gold);
+    color:#0A0A0A;
+  }
+  .btn-solid:hover{
+    background:transparent;
+    color:var(--gold);
+  }
+
+  /* ── header ──────────────────────── */
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:50;
+    transition:background .4s var(--ease),border-color .4s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(10,10,10,.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--divider);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:72px;
+  }
+  .brand{
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:.02em;
+  }
+  .brand span{color:var(--gold)}
+  .nav-links{
+    display:flex;
+    gap:36px;
+    align-items:center;
+  }
+  .nav-links a{
+    font-size:13px;
+    letter-spacing:.06em;
+    color:var(--text-dim);
+    transition:color .3s var(--ease);
+  }
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{
+    color:var(--gold)!important;
+    border:1px solid var(--gold);
+    padding:9px 20px;
+    border-radius:2px;
+    transition:all .3s var(--ease)!important;
+  }
+  .nav-cta:hover{background:var(--gold);color:#0A0A0A!important}
+  @media(max-width:768px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* ── hero ────────────────────────── */
+  .hero{
+    min-height:auto;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+    padding:130px 0 60px;
+  }
+  .hero-glow{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:680px;height:680px;
+    max-width:90vw;
+    background:radial-gradient(circle,var(--gold-soft) 0%,transparent 68%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero .container{position:relative;z-index:1}
+  .hero .label{display:inline-block;margin-bottom:28px}
+  .hero h1{
+    font-size:clamp(40px,7vw,82px);
+  }
+  .hero h1 .em{
+    color:var(--gold);
+    font-style:italic;
+    font-weight:500;
+  }
+  .hero-sub{
+    color:var(--text-dim);
+    font-size:clamp(16px,2vw,19px);
+    max-width:520px;
+    margin:28px 0 40px;
+  }
+
+  /* ── секции базовые ──────────────── */
+  section{padding:48px 0}
+
+  /* ── почему со мной ──────────────── */
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .why-card{
+    background:var(--surface-1);
+    border:1px solid var(--divider);
+    border-radius:4px;
+    padding:24px 28px;
+    transition:border-color .4s var(--ease),transform .4s var(--ease);
+  }
+  .why-card:hover{border-color:var(--gold);transform:translateY(-4px)}
+  .why-ico{
+    width:38px;height:38px;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  .why-card h3{
+    font-family:'Playfair Display',serif;
+    font-size:21px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .why-card p{color:var(--text-dim);font-size:15px}
+
+  /* ── пакеты ──────────────────────── */
+  .pkg-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+    align-items:start;
+  }
+  .pkg{
+    background:var(--surface-1);
+    border:1px solid var(--divider);
+    border-radius:6px;
+    padding:40px 32px;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    transition:border-color .4s var(--ease),transform .4s var(--ease),box-shadow .4s var(--ease);
+  }
+  .pkg:hover{
+    border-color:var(--gold);
+    transform:translateY(-6px);
+  }
+  .pkg.featured{
+    background:var(--surface-2);
+    border-color:rgba(201,169,110,.4);
+    transform:translateY(-12px);
+    position:relative;
+  }
+  .pkg.featured:hover{
+    border-color:var(--gold);
+    transform:translateY(-18px);
+    box-shadow:0 30px 60px -30px rgba(201,169,110,.25);
+  }
+  .pkg-badge{
+    position:absolute;
+    top:22px;right:22px;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    padding:5px 11px;
+    border-radius:2px;
+    font-weight:500;
+  }
+  .pkg-name{
+    font-family:'Playfair Display',serif;
+    font-size:15px;
+    letter-spacing:.04em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+  .pkg-title{
+    font-family:'Playfair Display',serif;
+    font-size:28px;
+    font-weight:600;
+    margin:6px 0 22px;
+  }
+  .pkg-price{
+    font-family:'Playfair Display',serif;
+    font-size:46px;
+    font-weight:700;
+    line-height:1;
+    color:var(--text);
+  }
+  .pkg-format{
+    color:var(--gold);
+    font-size:13px;
+    letter-spacing:.04em;
+    margin:14px 0 24px;
+  }
+  .pkg-for{
+    font-size:14px;
+    color:var(--text-dim);
+    padding:18px 0;
+    border-top:1px solid var(--divider);
+    border-bottom:1px solid var(--divider);
+  }
+  .pkg-for b{color:var(--text);font-weight:500}
+  .pkg-list{
+    list-style:none;
+    margin:24px 0;
+    flex:1;
+  }
+  .pkg-list li{
+    position:relative;
+    padding:0 0 14px 26px;
+    font-size:14px;
+    color:var(--text);
+  }
+  .pkg-list li::before{
+    content:"";
+    position:absolute;
+    left:0;top:8px;
+    width:7px;height:7px;
+    border:1px solid var(--gold);
+    transform:rotate(45deg);
+  }
+  .pkg-bonus{
+    background:var(--gold-soft);
+    border-left:2px solid var(--gold);
+    padding:14px 16px;
+    border-radius:2px;
+    font-size:13px;
+    color:var(--text);
+    margin-bottom:26px;
+  }
+  .pkg-bonus span{
+    display:block;
+    color:var(--gold);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+    margin-bottom:6px;
+  }
+  .pkg .btn{width:100%;justify-content:center;margin-top:auto}
+
+  /* ── галерея / карусель ──────────── */
+  .gallery-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:40px;
+  }
+  .gallery-head .label{display:block;margin-bottom:14px}
+  .gallery-head h2{font-size:clamp(28px,4vw,42px)}
+  .gallery-nav{display:flex;gap:12px;flex-shrink:0}
+  .gnav-btn{
+    width:48px;height:48px;
+    border:1px solid var(--divider);
+    background:transparent;
+    border-radius:50%;
+    color:var(--text);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .35s var(--ease);
+  }
+  .gnav-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+  .gnav-btn:disabled{opacity:.3;cursor:default}
+  .gnav-btn svg{width:18px;height:18px}
+
+  .gallery-track{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    padding:8px 0 20px;
+    margin:0 -24px;
+    padding-left:24px;
+    padding-right:24px;
+    scrollbar-width:none;
+  }
+  .gallery-track::-webkit-scrollbar{display:none}
+  .shot{
+    position:relative;
+    flex:0 0 auto;
+    width:360px;
+    max-width:78vw;
+    aspect-ratio:4/5;
+    border-radius:6px;
+    overflow:hidden;
+    scroll-snap-align:start;
+    border:1px solid var(--divider);
+    background:linear-gradient(145deg,#161616 0%,#0d0d0d 100%);
+    transition:border-color .4s var(--ease),transform .4s var(--ease);
+  }
+  .shot:hover{border-color:var(--gold);transform:translateY(-6px)}
+  .shot img{
+    width:100%;height:100%;
+    object-fit:cover;
+    transition:transform .6s var(--ease);
+  }
+  .shot:hover img{transform:scale(1.05)}
+  .shot-ph{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    color:var(--text-dim);
+  }
+  .shot-ph svg{width:40px;height:40px;color:var(--divider)}
+  .shot-ph span{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+  }
+  .shot-cap{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    padding:40px 20px 18px;
+    background:linear-gradient(transparent,rgba(0,0,0,.8));
+    font-family:'Playfair Display',serif;
+    font-size:18px;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .4s var(--ease),transform .4s var(--ease);
+  }
+  .shot:hover .shot-cap{opacity:1;transform:none}
+  .gallery-hint{
+    display:none;
+    color:var(--text-dim);
+    font-size:12px;
+    letter-spacing:.05em;
+    margin-top:8px;
+  }
+  @media(max-width:560px){.gallery-hint{display:block}}
+
+  /* ── процесс ─────────────────────── */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:24px;
+    counter-reset:step;
+  }
+  .step{
+    position:relative;
+    padding-top:28px;
+  }
+  .step::before{
+    counter-increment:step;
+    content:"0" counter(step);
+    font-family:'Playfair Display',serif;
+    font-size:54px;
+    font-weight:700;
+    color:var(--gold);
+    opacity:.22;
+    line-height:.7;
+    display:block;
+    margin-bottom:18px;
+  }
+  .step h3{
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .step p{color:var(--text-dim);font-size:14px}
+
+  /* ── CTA секция ──────────────────── */
+  .cta{
+    background:var(--surface-2);
+    border-top:1px solid var(--divider);
+    border-bottom:1px solid var(--divider);
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-glow{
+    position:absolute;
+    bottom:-200px;left:50%;
+    transform:translateX(-50%);
+    width:760px;height:480px;
+    max-width:100vw;
+    background:radial-gradient(ellipse,var(--gold-soft) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .cta .container{position:relative;z-index:1;text-align:center}
+  .cta h2{
+    font-size:clamp(32px,5vw,52px);
+    margin-bottom:18px;
+  }
+  .cta p{
+    color:var(--text-dim);
+    font-size:18px;
+    max-width:480px;
+    margin:0 auto 36px;
+  }
+  .cta-actions{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+  .cta-phone{
+    color:var(--text-dim);
+    font-size:14px;
+    letter-spacing:.04em;
+  }
+  .cta-phone a{color:var(--gold)}
+
+  /* ── footer ──────────────────────── */
+  footer{
+    padding:40px 0 32px;
+  }
+  .foot{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:32px;
+  }
+  .foot-name{
+    font-family:'Playfair Display',serif;
+    font-size:24px;
+    font-weight:600;
+  }
+  .foot-role{
+    color:var(--text-dim);
+    font-size:14px;
+    margin-top:6px;
+  }
+  .foot-social{
+    display:flex;
+    gap:16px;
+  }
+  .foot-social a{
+    width:42px;height:42px;
+    border:1px solid var(--divider);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-dim);
+    transition:all .35s var(--ease);
+  }
+  .foot-social a:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+    transform:translateY(-3px);
+  }
+  .foot-social svg{width:18px;height:18px}
+  .copy{
+    color:var(--text-dim);
+    font-size:12px;
+    letter-spacing:.05em;
+    margin-top:40px;
+    text-align:center;
+  }
+
+  /* ── fade-in анимация ────────────── */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .8s var(--ease),transform .8s var(--ease);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:none;
+  }
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ── адаптив ─────────────────────── */
+  @media(max-width:920px){
+    .why-grid{grid-template-columns:1fr}
+    .pkg-grid{grid-template-columns:1fr;gap:40px}
+    .pkg.featured{transform:none}
+    .pkg.featured:hover{transform:translateY(-6px)}
+    .steps{grid-template-columns:repeat(2,1fr);gap:40px 24px}
+  }
+  @media(max-width:560px){
+    section{padding:36px 0}
+    .steps{grid-template-columns:1fr}
+    .foot{flex-direction:column;align-items:flex-start}
+    .brand{font-size:16px}
+    .nav{height:62px}
+    /* галерея: кадр по центру экрана, ниже */
+    .gallery-track{scroll-padding:0 24px}
+    .shot{width:82vw;max-width:82vw;aspect-ratio:4/5;scroll-snap-align:center}
+    /* пакеты компактнее */
+    .pkg{padding:28px 22px}
+    .pkg-price{font-size:40px}
+    .pkg-list{margin:18px 0}
+    .pkg-grid{gap:28px}
+    .why-card{padding:22px 24px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header id="site-header">
+  <div class="container nav">
+    <a href="#" class="brand">Анастасия Куприянова<span>.</span></a>
+    <nav class="nav-links">
+      <a href="#gallery">Работы</a>
+      <a href="#packages">Программы</a>
+      <a href="#process">Как проходит</a>
+      <a href="#contact" class="nav-cta">Написать</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="container">
+    <span class="label reveal">Портретная и lifestyle-фотография</span>
+    <h1 class="display reveal">
+      Научись снимать<br>
+      так, как ты <span class="em">видишь</span>
+    </h1>
+    <p class="hero-sub reveal">Индивидуальное обучение фотографии — от базы до уверенного результата.</p>
+    <a href="#packages" class="btn btn-outline reveal">Выбрать программу</a>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══ ПОЧЕМУ СО МНОЙ ══ -->
+<section id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="label">Почему со мной</span>
+      <h2 class="display">Обучение, заточенное под результат</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <svg class="why-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>
+          <circle cx="11.5" cy="12.5" r="3.6"/>
+        </svg>
+        <h3>Практика с первого урока</h3>
+        <p>Никакой теории ради теории — сразу снимаем и разбираем.</p>
+      </div>
+      <div class="why-card reveal">
+        <svg class="why-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="12" cy="12" r="1.3"/>
+        </svg>
+        <h3>Программа под вас</h3>
+        <p>Учу тому, что нужно именно вам, а не по шаблону.</p>
+      </div>
+      <div class="why-card reveal">
+        <svg class="why-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="1.5"/>
+          <path d="m3.5 6.5 8.5 6 8.5-6"/>
+        </svg>
+        <h3>Обратная связь всегда</h3>
+        <p>Разбираем ваши работы между занятиями в чате.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══ ГАЛЕРЕЯ ══ -->
+<section id="gallery">
+  <div class="container">
+    <div class="gallery-head reveal">
+      <div>
+        <span class="label">Избранные работы</span>
+        <h2 class="display">Кадры, которые говорят сами за себя</h2>
+      </div>
+      <div class="gallery-nav">
+        <button class="gnav-btn" id="g-prev" aria-label="Назад">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="gnav-btn" id="g-next" aria-label="Вперёд">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="gallery-track reveal" id="gallery-track">
+      <!-- Замените .shot-ph на <img src="img/your-photo.jpg" alt="..."> когда будут фото -->
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 01</span>
+        </div>
+        <figcaption class="shot-cap">Портрет в естественном свете</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 02</span>
+        </div>
+        <figcaption class="shot-cap">Lifestyle на улице</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 03</span>
+        </div>
+        <figcaption class="shot-cap">Студийный портрет</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 04</span>
+        </div>
+        <figcaption class="shot-cap">Работа со светом</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 05</span>
+        </div>
+        <figcaption class="shot-cap">Эмоция в кадре</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/><circle cx="11.5" cy="12.5" r="3.6"/></svg>
+          <span>Фото 06</span>
+        </div>
+        <figcaption class="shot-cap">Цвет и настроение</figcaption>
+      </figure>
+    </div>
+    <p class="gallery-hint">← листайте, чтобы увидеть больше →</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══ ПАКЕТЫ ══ -->
+<section id="packages">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="label">Программы обучения</span>
+      <h2 class="display">Три формата — от первых кадров до работы с клиентами</h2>
+      <p>Выберите готовый пакет или соберём программу под ваши цели.</p>
+    </div>
+    <div class="pkg-grid">
+
+      <!-- ПАКЕТ 1 -->
+      <article class="pkg reveal">
+        <div class="pkg-name">Пакет 1</div>
+        <h3 class="pkg-title">Старт</h3>
+        <div class="pkg-price">7 500 ₽</div>
+        <div class="pkg-format">3 занятия по 1.5 часа</div>
+        <p class="pkg-for"><b>Для кого:</b> полный новичок — не понимаешь ни одной кнопки на камере или хочешь перестать снимать на авто.</p>
+        <ul class="pkg-list">
+          <li>Урок 1 — Камера/телефон: настройки, режимы, экспозиция, свет</li>
+          <li>Урок 2 — Композиция, кадрирование, цвет в кадре</li>
+          <li>Урок 3 — Базовая обработка в Lightroom или телефоне</li>
+        </ul>
+        <div class="pkg-bonus">
+          <span>Бонус</span>
+          Чек-лист настроек под разные условия съёмки
+        </div>
+        <a href="#contact" class="btn btn-outline">Выбрать «Старт»</a>
+      </article>
+
+      <!-- ПАКЕТ 2 -->
+      <article class="pkg featured reveal">
+        <div class="pkg-badge">Популярный</div>
+        <div class="pkg-name">Пакет 2</div>
+        <h3 class="pkg-title">Уверенный</h3>
+        <div class="pkg-price">15 000 ₽</div>
+        <div class="pkg-format">6 занятий по 1.5 часа</div>
+        <p class="pkg-for"><b>Для кого:</b> уже немного снимаешь, но не понимаешь, почему результат не нравится. Хочешь стабильный красивый результат.</p>
+        <ul class="pkg-list">
+          <li>Все 3 урока из пакета «Старт»</li>
+          <li>Урок 4 — Портретная съёмка: свет, позинг, работа с человеком</li>
+          <li>Урок 5 — Совместная практическая съёмка на улице/в студии</li>
+          <li>Урок 6 — Финальный разбор портфолио + план развития</li>
+        </ul>
+        <div class="pkg-bonus">
+          <span>Бонус</span>
+          Разбор 10 ваших фото в чате между занятиями + пресеты для Lightroom
+        </div>
+        <a href="#contact" class="btn btn-solid">Выбрать «Уверенный»</a>
+      </article>
+
+      <!-- ПАКЕТ 3 -->
+      <article class="pkg reveal">
+        <div class="pkg-name">Пакет 3</div>
+        <h3 class="pkg-title">Про</h3>
+        <div class="pkg-price">27 000 ₽</div>
+        <div class="pkg-format">10 занятий + сопровождение месяц</div>
+        <p class="pkg-for"><b>Для кого:</b> хочешь снимать для клиентов, вести Instagram профессионально или дойти до высокого уровня.</p>
+        <ul class="pkg-list">
+          <li>Все 6 уроков из пакета «Уверенный»</li>
+          <li>Урок 7 — Съёмка в разных условиях: студия, улица, помещение</li>
+          <li>Урок 8 — Обработка продвинутый уровень: цветокоррекция, ретушь</li>
+          <li>Урок 9 — Создание своего стиля, визуал для Instagram</li>
+          <li>Урок 10 — Работа с клиентами: цены, договор, коммуникация</li>
+          <li>30 дней поддержки в чате после курса</li>
+        </ul>
+        <div class="pkg-bonus">
+          <span>Бонус</span>
+          Готовый пресет-пак + шаблон договора с клиентом + разбор неограниченного количества фото в течение месяца
+        </div>
+        <a href="#contact" class="btn btn-outline">Выбрать «Про»</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══ ПРОЦЕСС ══ -->
+<section id="process">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="label">Как проходит обучение</span>
+      <h2 class="display">Четыре шага до фото, которыми гордишься</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h3>Созвон-знакомство</h3>
+        <p>15 минут бесплатно — определяем цели и ваш уровень.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Выбираем пакет</h3>
+        <p>Или собираем индивидуальную программу под вас.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Занятия</h3>
+        <p>Онлайн в Zoom или офлайн в Ростове-на-Дону.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Результат</h3>
+        <p>Фотографии, которыми вы гордитесь.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="contact" class="cta">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <span class="label reveal" style="display:inline-block;margin-bottom:18px">Свяжитесь со мной</span>
+    <h2 class="display reveal">Готовы начать?</h2>
+    <p class="reveal">Напишите мне — обсудим ваш уровень и подберём формат.</p>
+    <div class="cta-actions reveal">
+      <a href="https://t.me/anastasia_kuprik" target="_blank" rel="noopener" class="btn btn-solid">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.5l-4.8-1.5c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5Z"/></svg>
+        Написать в Telegram
+      </a>
+      <div class="cta-phone">или позвоните: <a href="tel:+79040275526">+7 (904) 027-55-26</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="foot">
+      <div class="reveal">
+        <div class="foot-name">Анастасия Куприянова</div>
+        <div class="foot-role">Фотограф</div>
+      </div>
+      <div class="foot-social reveal">
+        <a href="https://www.instagram.com/by.kuprik" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://t.me/anastasia_kuprik" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.5l-4.8-1.5c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="copy">© 2025 Анастасия Куприянова. Все права защищены.</div>
+  </div>
+</footer>
+
+<script>
+  // фон шапки при скролле
+  const header = document.getElementById('site-header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  // fade-in при скролле
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    // лёгкий каскад внутри одной группы
+    const sib = el.parentElement.querySelectorAll(':scope > .reveal');
+    el.style.transitionDelay = (Array.from(sib).indexOf(el) * 80) + 'ms';
+    io.observe(el);
+  });
+
+  // карусель галереи
+  const track = document.getElementById('gallery-track');
+  const gPrev = document.getElementById('g-prev');
+  const gNext = document.getElementById('g-next');
+  if (track && gPrev && gNext){
+    const step = () => {
+      const card = track.querySelector('.shot');
+      const gap = parseInt(getComputedStyle(track).columnGap) || 20;
+      return card ? card.offsetWidth + gap : track.clientWidth * 0.8;
+    };
+    const updateBtns = () => {
+      gPrev.disabled = track.scrollLeft <= 2;
+      gNext.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    };
+    gPrev.addEventListener('click', () => track.scrollBy({left:-step(), behavior:'smooth'}));
+    gNext.addEventListener('click', () => track.scrollBy({left: step(), behavior:'smooth'}));
+    track.addEventListener('scroll', updateBtns, {passive:true});
+    window.addEventListener('resize', updateBtns);
+    updateBtns();
+  }
+</script>
+
+</body>
+</html>
