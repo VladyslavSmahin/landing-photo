@@ -430,13 +430,15 @@
     background:linear-gradient(145deg,#161616 0%,#0d0d0d 100%);
     transition:border-color .4s var(--ease),transform .4s var(--ease);
   }
-  .shot:hover{border-color:var(--gold);transform:translateY(-6px)}
+  @media(hover:hover){.shot:hover{border-color:var(--gold);transform:translateY(-6px)}}
+  .shot.active{border-color:var(--gold)}
   .shot img{
     width:100%;height:100%;
     object-fit:cover;
     transition:transform .6s var(--ease);
   }
-  .shot:hover img{transform:scale(1.05)}
+  @media(hover:hover){.shot:hover img{transform:scale(1.05)}}
+  .shot.active img{transform:scale(1.04)}
   .shot-ph{
     position:absolute;
     inset:0;
@@ -464,7 +466,8 @@
     transform:translateY(8px);
     transition:opacity .4s var(--ease),transform .4s var(--ease);
   }
-  .shot:hover .shot-cap{opacity:1;transform:none}
+  @media(hover:hover){.shot:hover .shot-cap{opacity:1;transform:none}}
+  .shot.active .shot-cap{opacity:1;transform:none}
   .gallery-hint{
     display:none;
     color:var(--text-dim);
@@ -940,9 +943,27 @@
     };
     gPrev.addEventListener('click', () => track.scrollBy({left:-step(), behavior:'smooth'}));
     gNext.addEventListener('click', () => track.scrollBy({left: step(), behavior:'smooth'}));
-    track.addEventListener('scroll', updateBtns, {passive:true});
-    window.addEventListener('resize', updateBtns);
+
+    // на тач-экранах подсвечиваем карточку по центру вьюпорта
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    const shots = Array.from(track.querySelectorAll('.shot'));
+    const setActive = () => {
+      const r = track.getBoundingClientRect();
+      const center = r.left + r.width / 2;
+      let best = null, bestD = Infinity;
+      shots.forEach(s => {
+        const sr = s.getBoundingClientRect();
+        const d = Math.abs(sr.left + sr.width / 2 - center);
+        if (d < bestD){ bestD = d; best = s; }
+      });
+      shots.forEach(s => s.classList.toggle('active', s === best));
+    };
+
+    const onTrackScroll = () => { updateBtns(); if (isTouch) setActive(); };
+    track.addEventListener('scroll', onTrackScroll, {passive:true});
+    window.addEventListener('resize', onTrackScroll);
     updateBtns();
+    if (isTouch) setActive();
   }
 </script>
 
