@@ -45,10 +45,6 @@
     position:fixed;
     inset:0;
     z-index:-1;
-    background-image:
-      linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
-    background-size:64px 64px;
     pointer-events:none;
   }
   body::after{
@@ -217,12 +213,33 @@
     pointer-events:none;
     z-index:0;
   }
+  .hero-photo{
+    position:absolute;
+    top:0;right:0;bottom:0;
+    width:62%;
+    background:url(img/hero.jpg) center 75%/cover no-repeat;
+    -webkit-mask-image:radial-gradient(ellipse 65% 80% at 70% 50%, #000 0%, #000 25%, transparent 80%);
+    mask-image:radial-gradient(ellipse 65% 80% at 70% 50%, #000 0%, #000 25%, transparent 80%);
+    opacity:.6;
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero-photo::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(90deg, var(--bg) 0%, transparent 35%, transparent 100%);
+    pointer-events:none;
+  }
+  @media(max-width:920px){
+    .hero-photo{width:100%;opacity:.18}
+  }
   .hero .container{position:relative;z-index:1}
   .hero .label{display:inline-block;margin-bottom:28px}
   .hero h1{
     font-size:clamp(40px,7vw,82px);
   }
-  .hero h1 .em{
+  .hero h1 .em,
+  .display .em{
     color:var(--gold);
     font-style:italic;
     font-weight:500;
@@ -230,8 +247,9 @@
   .hero-sub{
     color:var(--text-dim);
     font-size:clamp(16px,2vw,19px);
-    max-width:520px;
+    max-width:780px;
     margin:28px 0 40px;
+    white-space:nowrap;
   }
 
   /* ── секции базовые ──────────────── */
@@ -298,13 +316,14 @@
   }
   .pkg-badge{
     position:absolute;
-    top:22px;right:22px;
-    font-size:10px;
+    top:-12px;right:24px;
+    font-size:9px;
     text-transform:uppercase;
-    letter-spacing:.15em;
+    letter-spacing:.18em;
     color:var(--gold);
+    background:var(--surface-2);
     border:1px solid var(--gold);
-    padding:5px 11px;
+    padding:4px 10px;
     border-radius:2px;
     font-weight:500;
   }
@@ -319,7 +338,7 @@
     font-family:'Playfair Display',serif;
     font-size:28px;
     font-weight:600;
-    margin:6px 0 22px;
+    margin:0 0 12px;
   }
   .pkg-price{
     font-family:'Playfair Display',serif;
@@ -361,6 +380,51 @@
     border:1px solid var(--gold);
     transform:rotate(45deg);
   }
+  .pkg-list .pkg-sub{
+    display:block;
+    margin-top:6px;
+    font-size:12px;
+    line-height:1.55;
+    color:var(--text-dim);
+    opacity:.65;
+  }
+  .pkg-list li.expandable{
+    cursor:pointer;
+    padding-right:24px;
+    user-select:none;
+  }
+  .pkg-list li.expandable::after{
+    content:"";
+    position:absolute;
+    right:4px;top:6px;
+    width:8px;height:8px;
+    border-right:1.5px solid var(--gold);
+    border-bottom:1.5px solid var(--gold);
+    transform:rotate(45deg);
+    transition:transform .25s ease, top .25s ease;
+  }
+  .pkg-list li.expandable.open::after{
+    top:9px;
+    transform:rotate(-135deg);
+  }
+  .pkg-list li.expandable .pkg-sub{
+    max-height:0;
+    margin-top:0;
+    opacity:0;
+    overflow:hidden;
+    transition:max-height .3s ease, margin-top .25s ease, opacity .25s ease;
+  }
+  .pkg-list li.expandable.open .pkg-sub{
+    max-height:260px;
+    margin-top:6px;
+    opacity:.65;
+  }
+  .pkg-meta{
+    font-size:14px;
+    color:var(--text);
+    margin:0 0 22px;
+  }
+  .pkg-meta b{font-weight:600;color:var(--text)}
   .pkg-bonus{
     background:var(--gold-soft);
     border-left:2px solid var(--gold);
@@ -528,6 +592,29 @@
     background:radial-gradient(ellipse,var(--gold-soft) 0%,transparent 70%);
     pointer-events:none;
   }
+  .cta-photo{
+    position:absolute;
+    inset:0;
+    background:url(img/cta.jpg) center 65%/cover no-repeat;
+    -webkit-mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image:linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    opacity:.7;
+    pointer-events:none;
+    z-index:0;
+  }
+  .cta-shade{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(ellipse 55% 55% at 50% 48%, rgba(10,10,10,.85) 0%, rgba(10,10,10,.55) 55%, transparent 90%),
+      linear-gradient(180deg, rgba(10,10,10,.35) 0%, rgba(10,10,10,.15) 35%, rgba(10,10,10,.15) 65%, rgba(10,10,10,.45) 100%);
+    pointer-events:none;
+    z-index:0;
+  }
+  @media(max-width:920px){
+    .cta-photo{opacity:.4}
+    .cta-shade{background:radial-gradient(ellipse 70% 70% at 50% 50%, rgba(10,10,10,.85) 0%, rgba(10,10,10,.45) 100%)}
+  }
   .cta .container{position:relative;z-index:1;text-align:center}
   .cta h2{
     font-size:clamp(32px,5vw,52px);
@@ -623,6 +710,7 @@
     .pkg.featured{transform:none}
     .pkg.featured:hover{transform:translateY(-6px)}
     .steps{grid-template-columns:repeat(2,1fr);gap:40px 24px}
+    .hero-sub{white-space:normal;max-width:520px}
   }
   @media(max-width:560px){
     section{padding:36px 0}
@@ -647,7 +735,7 @@
 <!-- ══ HEADER ══ -->
 <header id="site-header">
   <div class="container nav">
-    <a href="#" class="brand">Анастасия Куприянова<span>.</span></a>
+    <a href="#" class="brand">Анастасия Куприянова</a>
     <nav class="nav-links">
       <a href="#gallery">Работы</a>
       <a href="#packages">Программы</a>
@@ -660,13 +748,13 @@
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="hero-glow"></div>
+  <div class="hero-photo" aria-hidden="true"></div>
   <div class="container">
-    <span class="label reveal">Портретная и lifestyle-фотография</span>
     <h1 class="display reveal">
       Научись снимать<br>
-      так, как ты <span class="em">видишь</span>
+      так, как видишь <span class="em">ТЫ</span>
     </h1>
-    <p class="hero-sub reveal">Индивидуальное обучение фотографии — от базы до уверенного результата.</p>
+    <p class="hero-sub reveal">Индивидуальное обучение фотографии — от базы до уверенного результата</p>
     <a href="#packages" class="btn btn-outline reveal">Выбрать программу</a>
   </div>
 </section>
@@ -677,8 +765,8 @@
 <section id="why">
   <div class="container">
     <div class="section-head reveal">
-      <span class="label">Почему со мной</span>
-      <h2 class="display">Обучение, заточенное под результат</h2>
+      <span class="label">Подход</span>
+      <h2 class="display">Индивидуальное обучение фотографии</h2>
     </div>
     <div class="why-grid">
       <div class="why-card reveal">
@@ -686,8 +774,8 @@
           <path d="M2 7.5h3l1.5-2.2h7L15 7.5h5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>
           <circle cx="11.5" cy="12.5" r="3.6"/>
         </svg>
-        <h3>Практика с первого урока</h3>
-        <p>Никакой теории ради теории — сразу снимаем и разбираем.</p>
+        <h3>Практика с первого занятия</h3>
+        <p>Технические настройки разбираем на вашей камере и ваших кадрах. Работаем с реальными съёмочными задачами с первого занятия</p>
       </div>
       <div class="why-card reveal">
         <svg class="why-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
@@ -695,16 +783,16 @@
           <circle cx="12" cy="12" r="5"/>
           <circle cx="12" cy="12" r="1.3"/>
         </svg>
-        <h3>Программа под вас</h3>
-        <p>Учу тому, что нужно именно вам, а не по шаблону.</p>
+        <h3>Программа под вашу цель</h3>
+        <p>На старте смотрю ваши работы, определяю сильные стороны и зоны роста. От этого зависят фокус, темп и набор тем занятий</p>
       </div>
       <div class="why-card reveal">
         <svg class="why-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="5" width="18" height="14" rx="1.5"/>
           <path d="m3.5 6.5 8.5 6 8.5-6"/>
         </svg>
-        <h3>Обратная связь всегда</h3>
-        <p>Разбираем ваши работы между занятиями в чате.</p>
+        <h3>Всегда на связи</h3>
+        <p>Между занятиями мы вместе разбираем ваши работы. Я отвечаю на вопросы, направляю и делюсь подсказками по технике, композиции, свету и обработке</p>
       </div>
     </div>
   </div>
@@ -717,7 +805,6 @@
   <div class="container">
     <div class="gallery-head reveal">
       <div>
-        <span class="label">Избранные работы</span>
         <h2 class="display">Кадры, которые говорят сами за себя</h2>
       </div>
       <div class="gallery-nav">
@@ -733,27 +820,21 @@
     <div class="gallery-track reveal" id="gallery-track">
       <figure class="shot">
         <img src="img/work-01.webp" alt="Свадебная съёмка у старинной двери" loading="lazy">
-        <figcaption class="shot-cap">Свадебная съёмка в городе</figcaption>
       </figure>
       <figure class="shot">
         <img src="img/work-02.webp" alt="Утренняя домашняя съёмка пары" loading="lazy">
-        <figcaption class="shot-cap">Утро вдвоём</figcaption>
       </figure>
       <figure class="shot">
         <img src="img/work-03.webp" alt="Портрет девушки у окна" loading="lazy">
-        <figcaption class="shot-cap">Портрет у окна</figcaption>
       </figure>
       <figure class="shot">
-        <img src="img/work-04.webp" alt="Чёрно-белая съёмка пары на улице" loading="lazy">
-        <figcaption class="shot-cap">Чёрно-белая история</figcaption>
+        <img src="img/work-04.jpg" alt="Мужской прогулочный портрет на улице" loading="lazy">
       </figure>
       <figure class="shot">
         <img src="img/work-05.webp" alt="Портрет девушки в интерьере" loading="lazy">
-        <figcaption class="shot-cap">Портрет в интерьере</figcaption>
       </figure>
       <figure class="shot">
         <img src="img/work-06.webp" alt="Студийный портрет" loading="lazy">
-        <figcaption class="shot-cap">Студийная съёмка</figcaption>
       </figure>
     </div>
     <p class="gallery-hint">← листайте, чтобы увидеть больше →</p>
@@ -766,72 +847,113 @@
 <section id="packages">
   <div class="container">
     <div class="section-head reveal">
-      <span class="label">Программы обучения</span>
-      <h2 class="display">Три формата — от первых кадров до работы с клиентами</h2>
-      <p>Выберите готовый пакет или соберём программу под ваши цели.</p>
+      <span class="label">Тарифы</span>
+      <h2 class="display">Выбирай свой шаг</h2>
+      <p>Кто-то хочет наконец разобраться, как вообще работает камера. Кто-то — снимать и красиво обрабатывать. А кто-то — уже выйти на свои первые платные съёмки. Под каждую историю — свой тариф.</p>
     </div>
     <div class="pkg-grid">
 
-      <!-- ПАКЕТ 1 -->
+      <!-- ТАРИФ «БАЗА» -->
       <article class="pkg reveal">
-        <div class="pkg-name">Пакет 1</div>
-        <h3 class="pkg-title">Старт</h3>
-        <div class="pkg-price">7 500 ₽</div>
-        <div class="pkg-format">3 занятия по 1.5 часа</div>
-        <p class="pkg-for"><b>Для кого:</b> полный новичок — не понимаешь ни одной кнопки на камере или хочешь перестать снимать на авто.</p>
+        <h3 class="pkg-title">Тариф «База»</h3>
+        <div class="pkg-price">15 000 ₽</div>
+        <div class="pkg-format">4 занятия по 1.5 часа · онлайн или офлайн</div>
+        <p class="pkg-for"><b>Для кого:</b> для тех, кто хочет понять, как работает фотоаппарат, и начать снимать осознанно.</p>
         <ul class="pkg-list">
-          <li>Урок 1 — Камера/телефон: настройки, режимы, экспозиция, свет</li>
-          <li>Урок 2 — Композиция, кадрирование, цвет в кадре</li>
-          <li>Урок 3 — Базовая обработка в Lightroom или телефоне</li>
+          <li class="expandable">
+            Настройки камеры
+            <span class="pkg-sub">
+              разбор экспозиции, ISO, диафрагмы, выдержки<br>
+              разбор форматов съёмки RAW и JPEG<br>
+              разбор меню камеры
+            </span>
+          </li>
+          <li>Гайд по технике и объективам</li>
+          <li>PDF «10 ошибок начинающего фотографа»</li>
+          <li>Чек-лист «Что взять на первую съёмку»</li>
+          <li>Доступ к закрытому Telegram-комьюнити с разборами и заданиями</li>
+          <li>Поддержка в переписке между занятиями</li>
         </ul>
+        <p class="pkg-meta"><b>Длительность:</b> 10 дней</p>
         <div class="pkg-bonus">
           <span>Бонус</span>
           Чек-лист настроек под разные условия съёмки
         </div>
-        <a href="#contact" class="btn btn-outline">Выбрать «Старт»</a>
+        <a href="#contact" class="btn btn-outline">Выбрать «База»</a>
       </article>
 
-      <!-- ПАКЕТ 2 -->
+      <!-- ТАРИФ «СТАНДАРТ» -->
       <article class="pkg featured reveal">
         <div class="pkg-badge">Популярный</div>
-        <div class="pkg-name">Пакет 2</div>
-        <h3 class="pkg-title">Уверенный</h3>
-        <div class="pkg-price">15 000 ₽</div>
-        <div class="pkg-format">6 занятий по 1.5 часа</div>
-        <p class="pkg-for"><b>Для кого:</b> уже немного снимаешь, но не понимаешь, почему результат не нравится. Хочешь стабильный красивый результат.</p>
+        <h3 class="pkg-title">Тариф «Стандарт»</h3>
+        <div class="pkg-price">27 000 ₽</div>
+        <div class="pkg-format">9 занятий по 1.5–2 часа</div>
+        <p class="pkg-for"><b>Для кого:</b> для тех, кто хочет освоить полный цикл — от съёмки до готового фото.</p>
         <ul class="pkg-list">
-          <li>Все 3 урока из пакета «Старт»</li>
-          <li>Урок 4 — Портретная съёмка: свет, позинг, работа с человеком</li>
-          <li>Урок 5 — Совместная практическая съёмка на улице/в студии</li>
-          <li>Урок 6 — Финальный разбор портфолио + план развития</li>
+          <li>Всё из тарифа «База»</li>
+          <li class="expandable">
+            Работа со светом
+            <span class="pkg-sub">
+              учимся видеть свет в кадре — разбираем тени, блики и отражения,<br>
+              работаем с естественным светом, золотым часом и контровиком
+            </span>
+          </li>
+          <li class="expandable">
+            Гайд по искусственному свету
+            <span class="pkg-sub">
+              виды, оборудование, как использовать
+            </span>
+          </li>
+          <li>Композиция: правила, ракурсы, кадрирование</li>
+          <li>Основы позирования и работа с моделью</li>
+          <li>1 совместная практическая съёмка с моделью в Ростове</li>
+          <li>Базовая обработка в Lightroom: цвет, ретушь, экспорт</li>
+          <li>Разбор твоих самостоятельных съёмок (1 разбор)</li>
+          <li>PDF-конспекты + чек-листы перед съёмкой</li>
+          <li>Поддержка в переписке весь период</li>
         </ul>
+        <p class="pkg-meta"><b>Длительность:</b> 1 месяц</p>
         <div class="pkg-bonus">
           <span>Бонус</span>
           Разбор 10 ваших фото в чате между занятиями + пресеты для Lightroom
         </div>
-        <a href="#contact" class="btn btn-solid">Выбрать «Уверенный»</a>
+        <a href="#contact" class="btn btn-solid">Выбрать «Стандарт»</a>
       </article>
 
-      <!-- ПАКЕТ 3 -->
+      <!-- ТАРИФ «ПРЕМИУМ» -->
       <article class="pkg reveal">
-        <div class="pkg-name">Пакет 3</div>
-        <h3 class="pkg-title">Про</h3>
-        <div class="pkg-price">27 000 ₽</div>
-        <div class="pkg-format">10 занятий + сопровождение месяц</div>
-        <p class="pkg-for"><b>Для кого:</b> хочешь снимать для клиентов, вести Instagram профессионально или дойти до высокого уровня.</p>
+        <h3 class="pkg-title">Тариф «Премиум»</h3>
+        <div class="pkg-price">42 000 ₽</div>
+        <div class="pkg-format">12–14 занятий + 2 практические съёмки</div>
+        <p class="pkg-for"><b>Для кого:</b> для тех, кто хочет не просто научиться, а выйти на первые платные съёмки с поддержкой наставника.</p>
         <ul class="pkg-list">
-          <li>Все 6 уроков из пакета «Уверенный»</li>
-          <li>Урок 7 — Съёмка в разных условиях: студия, улица, помещение</li>
-          <li>Урок 8 — Обработка продвинутый уровень: цветокоррекция, ретушь</li>
-          <li>Урок 9 — Создание своего стиля, визуал для Instagram</li>
-          <li>Урок 10 — Работа с клиентами: цены, договор, коммуникация</li>
-          <li>30 дней поддержки в чате после курса</li>
+          <li>Всё из тарифа «Стандарт»</li>
+          <li>2 совместные практические съёмки в разных жанрах</li>
+          <li class="expandable">
+            Работа с моделью
+            <span class="pkg-sub">
+              как раскрепостить, общение, позы
+            </span>
+          </li>
+          <li>Мои авторские пресеты Lightroom</li>
+          <li class="expandable">
+            Гайд по продвижению
+            <span class="pkg-sub">
+              в каких соцсетях работать фотографу,<br>
+              что и как публиковать, фишки для роста
+            </span>
+          </li>
+          <li>Помощь в оформлении портфолио в Instagram</li>
+          <li>Разбор твоих съёмок: 3 разбора</li>
+          <li>Советы по ценообразованию и работе с клиентами</li>
+          <li>Месяц обратной связи после курса</li>
         </ul>
+        <p class="pkg-meta"><b>Длительность:</b> 1,5 месяца + месяц обратной связи</p>
         <div class="pkg-bonus">
           <span>Бонус</span>
           Готовый пресет-пак + шаблон договора с клиентом + разбор неограниченного количества фото в течение месяца
         </div>
-        <a href="#contact" class="btn btn-outline">Выбрать «Про»</a>
+        <a href="#contact" class="btn btn-outline">Выбрать «Премиум»</a>
       </article>
 
     </div>
@@ -850,19 +972,19 @@
     <div class="steps">
       <div class="step reveal">
         <h3>Созвон-знакомство</h3>
-        <p>15 минут бесплатно — определяем цели и ваш уровень.</p>
+        <p>15 минут бесплатно — определяем цели и ваш уровень</p>
       </div>
       <div class="step reveal">
         <h3>Выбираем пакет</h3>
-        <p>Или собираем индивидуальную программу под вас.</p>
+        <p>Или собираем индивидуальную программу под вас</p>
       </div>
       <div class="step reveal">
         <h3>Занятия</h3>
-        <p>Онлайн в Zoom или офлайн в Ростове-на-Дону.</p>
+        <p>Онлайн в Zoom или офлайн в Ростове-на-Дону</p>
       </div>
       <div class="step reveal">
         <h3>Результат</h3>
-        <p>Фотографии, которыми вы гордитесь.</p>
+        <p>Фотографии, которыми вы гордитесь</p>
       </div>
     </div>
   </div>
@@ -871,10 +993,12 @@
 <!-- ══ CTA ══ -->
 <section id="contact" class="cta">
   <div class="cta-glow"></div>
+  <div class="cta-photo" aria-hidden="true"></div>
+  <div class="cta-shade" aria-hidden="true"></div>
   <div class="container">
     <span class="label reveal" style="display:inline-block;margin-bottom:18px">Свяжитесь со мной</span>
     <h2 class="display reveal">Готовы начать?</h2>
-    <p class="reveal">Напишите мне — обсудим ваш уровень и подберём формат.</p>
+    <p class="reveal">Напишите мне — обсудим ваш уровень и подберём формат</p>
     <div class="cta-actions reveal">
       <a href="https://t.me/anastasia_kuprik" target="_blank" rel="noopener" class="btn btn-solid">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.5l-4.8-1.5c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5Z"/></svg>
@@ -968,6 +1092,11 @@
     updateBtns();
     if (isTouch) setActive();
   }
+
+  // раскрытие пунктов с описанием по клику
+  document.querySelectorAll('.pkg-list li.expandable').forEach(li => {
+    li.addEventListener('click', () => li.classList.toggle('open'));
+  });
 </script>
 
 </body>
