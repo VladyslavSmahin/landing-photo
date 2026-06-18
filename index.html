@@ -712,24 +712,24 @@
       overflow-x:auto;
       scroll-snap-type:x mandatory;
       scroll-behavior:smooth;
-      gap:16px;
+      gap:0;
       margin:0 -24px;
-      padding:8px 9vw 30px;
+      padding:8px 15vw 30px;
       scrollbar-width:none;
+      perspective:1200px;
+      perspective-origin:center center;
     }
     .pkg-grid::-webkit-scrollbar{display:none}
     .pkg{
-      flex:0 0 82vw;
-      max-width:360px;
+      flex:0 0 70vw;
+      max-width:340px;
+      margin:0 6px;
       scroll-snap-align:center;
-      opacity:.5;
-      transform:scale(.93);
-      transition:opacity .35s var(--ease), transform .35s var(--ease);
+      transform-origin:center center;
+      backface-visibility:hidden;
+      will-change:transform,opacity;
+      transition:none;
     }
-    .pkg.in-view{opacity:1;transform:scale(1)}
-    .pkg.featured{transform:scale(.93)}
-    .pkg.featured.in-view{transform:scale(1)}
-    .pkg.featured:hover{transform:scale(1)}
 
     /* Подход — горизонтальный слайдер */
     .why-grid{
@@ -738,21 +738,24 @@
       overflow-x:auto;
       scroll-snap-type:x mandatory;
       scroll-behavior:smooth;
-      gap:16px;
+      gap:0;
       margin:0 -24px;
-      padding:8px 11vw 24px;
+      padding:8px 18vw 24px;
       scrollbar-width:none;
+      perspective:1100px;
+      perspective-origin:center center;
     }
     .why-grid::-webkit-scrollbar{display:none}
     .why-card{
-      flex:0 0 78vw;
-      max-width:340px;
+      flex:0 0 64vw;
+      max-width:320px;
+      margin:0 6px;
       scroll-snap-align:center;
-      opacity:.5;
-      transform:scale(.94);
-      transition:opacity .35s var(--ease), transform .35s var(--ease);
+      transform-origin:center center;
+      backface-visibility:hidden;
+      will-change:transform,opacity;
+      transition:none;
     }
-    .why-card.in-view{opacity:1;transform:scale(1)}
 
     .steps{grid-template-columns:repeat(2,1fr);gap:40px 24px}
     .hero-sub{white-space:normal;max-width:520px}
@@ -1149,35 +1152,49 @@
   // мобильные слайдеры (тарифы, подход)
   (function setupMobileSliders(){
     const mq = window.matchMedia('(max-width:920px)');
-    function track(sel, itemSel, defaultIdx){
+    // 3D-coverflow: глубина по бокам от центральной карточки
+    function coverflow(sel, itemSel, defaultIdx){
       const t = document.querySelector(sel);
       if (!t) return null;
-      const items = t.querySelectorAll(itemSel);
+      const items = [...t.querySelectorAll(itemSel)];
       if (!items.length) return null;
-      const update = () => {
-        if (!mq.matches){ items.forEach(i => i.classList.remove('in-view')); return; }
-        const trackCenter = t.getBoundingClientRect().left + t.clientWidth/2;
-        let best = items[0], min = Infinity;
+      let raf = null;
+      const apply = () => {
+        raf = null;
+        if (!mq.matches){
+          items.forEach(i => { i.style.transform=''; i.style.opacity=''; i.style.zIndex=''; });
+          return;
+        }
+        const center = t.getBoundingClientRect().left + t.clientWidth/2;
         items.forEach(i => {
           const r = i.getBoundingClientRect();
-          const d = Math.abs(r.left + r.width/2 - trackCenter);
-          if (d < min){ min = d; best = i; }
+          const off = (r.left + r.width/2 - center) / r.width; // ≈ -1..1 на ширину карточки
+          const c = Math.max(-2, Math.min(2, off));
+          const a = Math.min(Math.abs(c), 1);
+          const scale   = 1 - a*0.24;
+          const rotate  = -c*24;     // соседние «отворачиваются» вглубь
+          const shift   = -c*12;     // подтягиваем к центру (перекрытие)
+          const opacity = 1 - a*0.58;
+          i.style.transform = `translateX(${shift}%) rotateY(${rotate}deg) scale(${scale})`;
+          i.style.opacity = opacity.toFixed(3);
+          i.style.zIndex = String(100 - Math.round(a*100));
         });
-        items.forEach(i => i.classList.toggle('in-view', i === best));
       };
-      t.addEventListener('scroll', update, {passive:true});
-      window.addEventListener('resize', update);
+      const onScroll = () => { if (!raf) raf = requestAnimationFrame(apply); };
+      t.addEventListener('scroll', onScroll, {passive:true});
+      window.addEventListener('resize', onScroll);
       const setDefault = () => {
-        if (!mq.matches) return;
+        if (!mq.matches){ apply(); return; }
         const target = items[defaultIdx] || items[0];
         if (target) target.scrollIntoView({behavior:'instant', block:'nearest', inline:'center'});
-        update();
+        apply();
       };
       requestAnimationFrame(setDefault);
-      return {update, setDefault};
+      return {update: apply, setDefault};
     }
-    const pkg = track('.pkg-grid', '.pkg', 1);   // default = Стандарт
-    const why = track('.why-grid', '.why-card', 0);
+
+    const pkg = coverflow('.pkg-grid', '.pkg', 1);   // default = Стандарт
+    const why = coverflow('.why-grid', '.why-card', 0);
     mq.addEventListener('change', () => { pkg && pkg.setDefault(); why && why.setDefault(); });
   })();
 </script>
