@@ -705,16 +705,64 @@
 
   /* ── адаптив ─────────────────────── */
   @media(max-width:920px){
-    .why-grid{grid-template-columns:1fr}
-    .pkg-grid{grid-template-columns:1fr;gap:40px}
-    .pkg.featured{transform:none}
-    .pkg.featured:hover{transform:translateY(-6px)}
+    /* Тарифы — горизонтальный слайдер */
+    .pkg-grid{
+      display:flex;
+      grid-template-columns:none;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      gap:16px;
+      margin:0 -24px;
+      padding:8px 9vw 30px;
+      scrollbar-width:none;
+    }
+    .pkg-grid::-webkit-scrollbar{display:none}
+    .pkg{
+      flex:0 0 82vw;
+      max-width:360px;
+      scroll-snap-align:center;
+      opacity:.5;
+      transform:scale(.93);
+      transition:opacity .35s var(--ease), transform .35s var(--ease);
+    }
+    .pkg.in-view{opacity:1;transform:scale(1)}
+    .pkg.featured{transform:scale(.93)}
+    .pkg.featured.in-view{transform:scale(1)}
+    .pkg.featured:hover{transform:scale(1)}
+
+    /* Подход — горизонтальный слайдер */
+    .why-grid{
+      display:flex;
+      grid-template-columns:none;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;
+      gap:16px;
+      margin:0 -24px;
+      padding:8px 11vw 24px;
+      scrollbar-width:none;
+    }
+    .why-grid::-webkit-scrollbar{display:none}
+    .why-card{
+      flex:0 0 78vw;
+      max-width:340px;
+      scroll-snap-align:center;
+      opacity:.5;
+      transform:scale(.94);
+      transition:opacity .35s var(--ease), transform .35s var(--ease);
+    }
+    .why-card.in-view{opacity:1;transform:scale(1)}
+
     .steps{grid-template-columns:repeat(2,1fr);gap:40px 24px}
     .hero-sub{white-space:normal;max-width:520px}
+
+    /* Меньше тёмных пятен по бокам на мобилке */
+    .hero-glow{width:140vw;height:140vw;max-width:140vw;opacity:.7}
   }
   @media(max-width:560px){
     section{padding:36px 0}
-    .steps{grid-template-columns:1fr}
+    .steps{grid-template-columns:repeat(2,1fr);gap:32px 16px}
     .foot{flex-direction:column;align-items:flex-start}
     .brand{font-size:16px}
     .nav{height:62px}
@@ -1026,7 +1074,7 @@
         </a>
       </div>
     </div>
-    <div class="copy">© 2025 Анастасия Куприянова. Все права защищены.</div>
+    <div class="copy">© 2026 Анастасия Куприянова. Все права защищены.</div>
   </div>
 </footer>
 
@@ -1097,6 +1145,41 @@
   document.querySelectorAll('.pkg-list li.expandable').forEach(li => {
     li.addEventListener('click', () => li.classList.toggle('open'));
   });
+
+  // мобильные слайдеры (тарифы, подход)
+  (function setupMobileSliders(){
+    const mq = window.matchMedia('(max-width:920px)');
+    function track(sel, itemSel, defaultIdx){
+      const t = document.querySelector(sel);
+      if (!t) return null;
+      const items = t.querySelectorAll(itemSel);
+      if (!items.length) return null;
+      const update = () => {
+        if (!mq.matches){ items.forEach(i => i.classList.remove('in-view')); return; }
+        const trackCenter = t.getBoundingClientRect().left + t.clientWidth/2;
+        let best = items[0], min = Infinity;
+        items.forEach(i => {
+          const r = i.getBoundingClientRect();
+          const d = Math.abs(r.left + r.width/2 - trackCenter);
+          if (d < min){ min = d; best = i; }
+        });
+        items.forEach(i => i.classList.toggle('in-view', i === best));
+      };
+      t.addEventListener('scroll', update, {passive:true});
+      window.addEventListener('resize', update);
+      const setDefault = () => {
+        if (!mq.matches) return;
+        const target = items[defaultIdx] || items[0];
+        if (target) target.scrollIntoView({behavior:'instant', block:'nearest', inline:'center'});
+        update();
+      };
+      requestAnimationFrame(setDefault);
+      return {update, setDefault};
+    }
+    const pkg = track('.pkg-grid', '.pkg', 1);   // default = Стандарт
+    const why = track('.why-grid', '.why-card', 0);
+    mq.addEventListener('change', () => { pkg && pkg.setDefault(); why && why.setDefault(); });
+  })();
 </script>
 
 </body>
